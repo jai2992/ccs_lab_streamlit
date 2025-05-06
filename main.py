@@ -22,11 +22,9 @@ def sidebar_navigation(pages: List[str]):
     page = st.sidebar.radio('Select a page', filtered if filtered else pages)
     return page
 
-def get_code_no_comments(module_func):
-    code = inspect.getsource(module_func)
-    lines = code.split('\n')
-    no_comments = [l for l in lines if not l.strip().startswith('#')]
-    return '\n'.join(no_comments)
+def get_full_code(filename):
+    with open(filename, 'r') as f:
+        return f.read()
 
 # Page functions
 def page_caesar_cipher():
@@ -39,9 +37,9 @@ def page_caesar_cipher():
         decrypted = caesar_cipher_decrypt(encrypted, key)
         st.write(f'**Encrypted:** {encrypted}')
         st.write(f'**Decrypted:** {decrypted}')
+    caesar_code = get_full_code('caesar.py')
     st.markdown('---')
-    st.markdown('**Algorithm Code (no comments):**')
-    caesar_code = get_code_no_comments(caesar_cipher_encrypt) + '\n' + get_code_no_comments(caesar_cipher_decrypt)
+    st.markdown('**Full Algorithm Code:**')
     st.code(caesar_code, language='python')
     st.button('Copy Code', on_click=lambda: st.session_state.update({'_code_to_copy': caesar_code}))
 
@@ -55,15 +53,9 @@ def page_playfair_cipher():
         decrypted = playfair_decrypt(encrypted, keyword)
         st.write(f'**Encrypted:** {encrypted}')
         st.write(f'**Decrypted:** {decrypted}')
+    playfair_code = get_full_code('playfair.py')
     st.markdown('---')
-    st.markdown('**Algorithm Code (no comments):**')
-    playfair_code = (
-        get_code_no_comments(playfair_encrypt)
-        + '\n' + get_code_no_comments(playfair_decrypt)
-        + '\n' + get_code_no_comments(__import__('playfair').playfair_generate_key_matrix)
-        + '\n' + get_code_no_comments(__import__('playfair').playfair_find_position)
-        + '\n' + get_code_no_comments(__import__('playfair').playfair_prepare_text)
-    )
+    st.markdown('**Full Algorithm Code:**')
     st.code(playfair_code, language='python')
     st.button('Copy Code', on_click=lambda: st.session_state.update({'_code_to_copy': playfair_code}))
 
@@ -84,17 +76,9 @@ def page_hill_cipher():
                 st.write(f'**Decrypted:** {decrypted}')
         except Exception as e:
             st.write(f'**Error:** {e}')
+    hill_code = get_full_code('hill.py')
     st.markdown('---')
-    st.markdown('**Algorithm Code (no comments):**')
-    hill_code = (
-        get_code_no_comments(hill_encrypt)
-        + '\n' + get_code_no_comments(hill_decrypt)
-        + '\n' + get_code_no_comments(__import__('hill').hill_prepare_text)
-        + '\n' + get_code_no_comments(__import__('hill').hill_text_to_numbers)
-        + '\n' + get_code_no_comments(__import__('hill').hill_numbers_to_text)
-        + '\n' + get_code_no_comments(__import__('hill').modinv)
-        + '\n' + get_code_no_comments(__import__('hill').hill_inverse_matrix)
-    )
+    st.markdown('**Full Algorithm Code:**')
     st.code(hill_code, language='python')
     st.button('Copy Code', on_click=lambda: st.session_state.update({'_code_to_copy': hill_code}))
 
@@ -108,9 +92,9 @@ def page_rail_fence_row():
         decrypted = rail_fence_decrypt_row_major(encrypted, rails)
         st.write(f'**Encrypted:** {encrypted}')
         st.write(f'**Decrypted:** {decrypted}')
+    rf_row_code = get_full_code('railfence_row.py')
     st.markdown('---')
-    st.markdown('**Algorithm Code (no comments):**')
-    rf_row_code = get_code_no_comments(rail_fence_encrypt_row_major) + '\n' + get_code_no_comments(rail_fence_decrypt_row_major)
+    st.markdown('**Full Algorithm Code:**')
     st.code(rf_row_code, language='python')
     st.button('Copy Code', on_click=lambda: st.session_state.update({'_code_to_copy': rf_row_code}))
 
@@ -124,9 +108,9 @@ def page_rail_fence_col():
         decrypted = rail_fence_decrypt_col_major(encrypted, cols)
         st.write(f'**Encrypted:** {encrypted}')
         st.write(f'**Decrypted:** {decrypted}')
+    rf_col_code = get_full_code('railfence_col.py')
     st.markdown('---')
-    st.markdown('**Algorithm Code (no comments):**')
-    rf_col_code = get_code_no_comments(rail_fence_encrypt_col_major) + '\n' + get_code_no_comments(rail_fence_decrypt_col_major)
+    st.markdown('**Full Algorithm Code:**')
     st.code(rf_col_code, language='python')
     st.button('Copy Code', on_click=lambda: st.session_state.update({'_code_to_copy': rf_col_code}))
 
@@ -143,9 +127,9 @@ def page_des():
             decrypted = des_decrypt(encrypted, key)
             st.write(f'**Encrypted:** {encrypted}')
             st.write(f'**Decrypted:** {decrypted}')
+    des_code = get_full_code('des.py')
     st.markdown('---')
-    st.markdown('**Algorithm Code (no comments):**')
-    des_code = get_code_no_comments(des_encrypt) + '\n' + get_code_no_comments(des_decrypt)
+    st.markdown('**Full Algorithm Code:**')
     st.code(des_code, language='python')
     st.button('Copy Code', on_click=lambda: st.session_state.update({'_code_to_copy': des_code}))
 
@@ -162,9 +146,9 @@ def page_aes():
             decrypted = aes_decrypt(encrypted, key)
             st.write(f'**Encrypted:** {encrypted}')
             st.write(f'**Decrypted:** {decrypted}')
+    aes_code = get_full_code('aes.py')
     st.markdown('---')
-    st.markdown('**Algorithm Code (no comments):**')
-    aes_code = get_code_no_comments(aes_encrypt) + '\n' + get_code_no_comments(aes_decrypt)
+    st.markdown('**Full Algorithm Code:**')
     st.code(aes_code, language='python')
     st.button('Copy Code', on_click=lambda: st.session_state.update({'_code_to_copy': aes_code}))
 
@@ -182,9 +166,9 @@ def page_rsa():
         st.write(f'**Private Key:** {priv}')
         st.write(f'**Encrypted:** {encrypted}')
         st.write(f'**Decrypted:** {decrypted}')
+    rsa_code = get_full_code('rsa.py')
     st.markdown('---')
-    st.markdown('**Algorithm Code (no comments):**')
-    rsa_code = get_code_no_comments(rsa_generate_keys) + '\n' + get_code_no_comments(rsa_encrypt) + '\n' + get_code_no_comments(rsa_decrypt)
+    st.markdown('**Full Algorithm Code:**')
     st.code(rsa_code, language='python')
     st.button('Copy Code', on_click=lambda: st.session_state.update({'_code_to_copy': rsa_code}))
 
@@ -201,9 +185,9 @@ def page_diffie_hellman():
         st.write(f'**User B Public Value (B):** {B}')
         st.write(f'**User A Shared Key:** {key_a}')
         st.write(f'**User B Shared Key:** {key_b}')
+    dh_code = get_full_code('diffie_hellman.py')
     st.markdown('---')
-    st.markdown('**Algorithm Code (no comments):**')
-    dh_code = get_code_no_comments(diffie_hellman_shared_key)
+    st.markdown('**Full Algorithm Code:**')
     st.code(dh_code, language='python')
     st.button('Copy Code', on_click=lambda: st.session_state.update({'_code_to_copy': dh_code}))
 
@@ -215,9 +199,9 @@ def page_sha():
     if st.button('Hash', key='sha_btn'):
         digest = sha_hash(message, variant)
         st.write(f'**{variant.upper()} Hash:** {digest}')
+    sha_code = get_full_code('sha.py')
     st.markdown('---')
-    st.markdown('**Algorithm Code (no comments):**')
-    sha_code = get_code_no_comments(sha_hash)
+    st.markdown('**Full Algorithm Code:**')
     st.code(sha_code, language='python')
     st.button('Copy Code', on_click=lambda: st.session_state.update({'_code_to_copy': sha_code}))
 
@@ -228,9 +212,9 @@ def page_md5():
     if st.button('Hash', key='md5_btn'):
         digest = md5_hash(message)
         st.write(f'**MD5 Hash:** {digest}')
+    md5_code = get_full_code('md5.py')
     st.markdown('---')
-    st.markdown('**Algorithm Code (no comments):**')
-    md5_code = get_code_no_comments(md5_hash)
+    st.markdown('**Full Algorithm Code:**')
     st.code(md5_code, language='python')
     st.button('Copy Code', on_click=lambda: st.session_state.update({'_code_to_copy': md5_code}))
 
